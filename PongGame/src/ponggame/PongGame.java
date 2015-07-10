@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pong;
+package ponggame;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -12,7 +12,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.lang.Math;
 
-public class Pong extends JFrame
+public class PongGame extends JFrame
 {
     private static final int frameWidth = 500;
     private static final int frameHeight = 500;
