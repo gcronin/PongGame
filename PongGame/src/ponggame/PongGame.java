@@ -36,9 +36,9 @@ public class PongGame extends JFrame
       settingsPanel.add(heading);
       
             
-      Ball ball = new Ball(20, 20, 30, 5);
-      Paddle leftPaddle = new Paddle(0, 100, 20, 100);
-      Paddle rightPaddle = new Paddle(460, 100, 20, 100);
+      Ball ball = new Ball(200, 100, 30, 10);
+      Paddle leftPaddle = new Paddle(0, 100, 20, 100, ball);
+      Paddle rightPaddle = new Paddle(460, 100, 20, 100, ball);
       GamePanel gamePanel = new GamePanel(ball, leftPaddle, rightPaddle, heading);
       
       
@@ -96,10 +96,20 @@ class GamePanel extends JPanel
     {
         ball.move();
         head.setText("heading: " + Math.round(Math.toDegrees(ball.heading)));
-        if(ball.xcor < 0 || ball.xcor > getWidth() - ball.ballDiameter )
+        //System.out.println("Ball: " + ball.xcor + "  Paddle Edge:  " + leftPaddle.width);
+        if( ball.xcor  < leftPaddle.width  )
         {
-           
-            ball.heading = Math.PI - ball.heading;
+            
+            if(leftPaddle.overlaps(ball.ycor)) {
+                ball.heading = Math.PI - ball.heading;
+           }
+        }
+        if(( ball.xcor + ball.ballDiameter)  > getWidth() - rightPaddle.width)
+        {
+            
+            if(rightPaddle.overlaps(ball.ycor)) {
+                ball.heading = Math.PI - ball.heading;
+           }
         }
         // bounce vertically
         if(ball.ycor < 0 || ball.ycor > getHeight() - ball.ballDiameter)
@@ -134,7 +144,7 @@ class Listener implements ActionListener, MouseMotionListener
     
      @Override
     public void mouseMoved(MouseEvent e) {
-        System.out.println("Mouse moved: " + e.getX() + ", " + e.getY());
+        //System.out.println("Mouse moved: " + e.getX() + ", " + e.getY());
         if(e.getY() <= gamePanel.leftPaddle.height/2)
         {
            gamePanel.leftPaddle.ycor = 0; 
@@ -216,13 +226,21 @@ class Paddle
     public int xcor;
     public int width;
     public int height;
+    public int ballDiameter;
     
     // constructor
-    public Paddle(int xcor, int ycor, int width, int height)
+    public Paddle(int xcor, int ycor, int width, int height, Ball ball)
     {
         this.xcor = xcor;
         this.ycor = ycor;
         this.width = width;
         this.height = height;
+        this.ballDiameter = ball.ballDiameter;
     } 
+    
+    public boolean overlaps(int ballycor)
+    {
+        if( ballycor + ballDiameter/2 > (this.ycor + height ) || ballycor + ballDiameter/2 < (this.ycor ))  { return false; }
+        else return true;
+    }
 }
