@@ -62,10 +62,10 @@ public class PongGame extends JFrame
 class GamePanel extends JPanel
 {
     // local variables
-    private Ball ball;
+    private final Ball ball;
     public Paddle leftPaddle;
     public Paddle rightPaddle;
-    private JLabel head;
+    private final JLabel head;
     
     // constructor
     public GamePanel(Ball ball, Paddle leftPaddle, Paddle rightPaddle, JLabel head)
@@ -102,6 +102,16 @@ class GamePanel extends JPanel
             
             if(leftPaddle.overlaps(ball.ycor)) {
                 ball.heading = Math.PI - ball.heading;
+                while(ball.heading > Math.PI ) {
+                    ball.heading -= 2*Math.PI;
+                }
+                while(ball.heading < -Math.PI ) {
+                    ball.heading += 2*Math.PI;
+                }
+                if( Math.abs(ball.heading) > Math.PI / 2)
+                {
+                    ball.heading = Math.PI - ball.heading;
+                }
            }
         }
         if(( ball.xcor + ball.ballDiameter)  > getWidth() - rightPaddle.width)
@@ -127,7 +137,7 @@ class GamePanel extends JPanel
 class Listener implements ActionListener, MouseMotionListener
 {
     // local variables
-    private GamePanel gamePanel;
+    private final GamePanel gamePanel;
     
     // constructor
     public Listener(GamePanel gamePanel)
