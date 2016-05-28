@@ -30,18 +30,22 @@ public class PongGame extends JFrame
     Ball ball;
     Paddle leftPaddle;
     Paddle rightPaddle;
+    JPanel settingsPanel;
+    JPanel startupPanel;
+    JFrame frame;
     JoystickController readJoystick ;
-    Listener listener;
     Timer timer;
     GamePanel gamePanel;
+    PongGame game;
     
     public static void main(String[] args)
     {
        PongGame game = new PongGame();
-       game.initializeGame(game);
+       game.setupPlayers();
+       game.initializeGame();
     }
 
-    public void initializeGame(PongGame game)
+    public void initializeGame()
     {
       // variable definions
       ball = new Ball(200, 100, 30, 10);
@@ -57,10 +61,9 @@ public class PongGame extends JFrame
       gamePanel = new GamePanel(ball, leftPaddle, rightPaddle, player1ScoreLabel, player2ScoreLabel, readJoystick, game);
       
       readJoystick.SetController();
-      
-       
+             
       // Outer frame for controla
-      JPanel settingsPanel = new JPanel();
+      settingsPanel = new JPanel();
       settingsPanel.setBackground(Color.YELLOW);
       settingsPanel.add(player1ScoreLabel);
       settingsPanel.add(startButton);
@@ -68,7 +71,7 @@ public class PongGame extends JFrame
       settingsPanel.add(player2ScoreLabel);
       
       // Inner frame is where the actual game is played
-      JFrame frame = new JFrame("Pong Game"); 
+      frame = new JFrame("Pong Game"); 
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       BorderLayout layout = new BorderLayout();
       frame.setLayout(layout);
@@ -90,11 +93,17 @@ public class PongGame extends JFrame
                   
     }
     
-    public void endGame(  )
+    public void setupPlayers()
     {
-        timer.stop();
-        endOfGameField.setText("GAME OVER!!!");
-        startButton.setText("Play Again");
+        
+    
+    }
+    
+    public void endGame()
+    {
+        //timer.stop();
+        //endOfGameField.setText("GAME OVER!!!");
+        //startButton.setText("Play Again");
     }
 }
 
@@ -152,6 +161,7 @@ class GamePanel extends JPanel
             if(leftPaddle.overlaps(ball.ycor)) {
                 ball.heading = Math.PI - ball.heading;         
                 score1 += 1;
+                                
             }
         }
         if(( ball.xcor + ball.ballDiameter + 5 )  > getWidth() - leftPaddle.width)
@@ -159,7 +169,7 @@ class GamePanel extends JPanel
             if(rightPaddle.overlaps(ball.ycor)) {
                 ball.heading = Math.PI - ball.heading;
                 score2 += 1;
-           }
+            }
         }
         // bounce vertically
         if(ball.ycor < 0 || ball.ycor > getHeight() - ball.ballDiameter)
